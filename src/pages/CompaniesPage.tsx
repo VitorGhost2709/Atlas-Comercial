@@ -4,42 +4,6 @@ import { ReloadIconButton } from '../components/ReloadIconButton'
 import { useEmpresasByCityAndCategory } from '../hooks/useEmpresasByCityAndCategory'
 import type { CompaniesRouteParams } from '../routes/routeTypes'
 import { ROUTES } from '../routes/paths'
-import { textoOuEmDash } from '../utils/textoOuEmDash'
-
-function CampoEmpresa({
-  label,
-  value,
-  destaque,
-  labelNoWrap,
-  valueNoWrap,
-}: {
-  label: string
-  value: string
-  destaque?: boolean
-  /** Evita quebra do rótulo em duas linhas (ex.: “Responsável de compras”). */
-  labelNoWrap?: boolean
-  /** Evita quebra do valor em desktop (ex.: telefones). */
-  valueNoWrap?: boolean
-}) {
-  return (
-    <div className="min-w-0">
-      <div
-        className={`text-[10px] font-medium uppercase tracking-wider text-[#80466e] sm:text-[11px] ${
-          labelNoWrap ? 'whitespace-nowrap tracking-wide sm:tracking-wider' : ''
-        }`}
-      >
-        {label}
-      </div>
-      <div
-        className={`mt-1 text-sm leading-snug ${
-          destaque ? 'font-semibold text-zinc-100' : 'font-normal text-zinc-300'
-        } ${valueNoWrap ? 'lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis' : 'break-words'}`}
-      >
-        {value}
-      </div>
-    </div>
-  )
-}
 
 export function CompaniesPage() {
   const { stateId, regionId, cityId, categoryId } = useParams<CompaniesRouteParams>()
@@ -121,30 +85,20 @@ export function CompaniesPage() {
                     to={storesBaseRoute ? storesBaseRoute(empresa.id) : '#'}
                     className="block rounded-xl border border-white/10 bg-white/5 px-4 py-4 outline-none transition hover:border-[#b66570]/35 hover:bg-white/[0.07] focus-visible:ring-2 focus-visible:ring-[#ed9e6f]/30 active:scale-[0.99] sm:px-5 lg:px-6"
                   >
-                    <div className="flex flex-col gap-4 lg:grid lg:grid-cols-[2fr_2fr_1.5fr_1.5fr] lg:gap-x-6 lg:gap-y-2">
+                    <div className="flex items-start justify-between gap-4">
                       <div className="min-w-0">
-                        <CampoEmpresa label="Empresa" value={textoOuEmDash(empresa.nome)} destaque />
+                        <div className="text-[10px] font-medium uppercase tracking-wider text-[#80466e] sm:text-[11px]">
+                          Empresa
+                        </div>
+                        <div className="mt-1 break-words text-sm font-semibold leading-snug text-zinc-100">
+                          {empresa.nome_empresa}
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <CampoEmpresa
-                          label="Responsável de compras"
-                          value={textoOuEmDash(empresa.nome_responsavel_compras)}
-                          labelNoWrap
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <CampoEmpresa
-                          label="Telefone"
-                          value={textoOuEmDash(empresa.telefone_principal)}
-                          valueNoWrap
-                        />
-                      </div>
-                      <div className="min-w-0">
-                        <CampoEmpresa
-                          label="WhatsApp"
-                          value={textoOuEmDash(empresa.whatsapp)}
-                          valueNoWrap
-                        />
+
+                      <div className="shrink-0 pt-0.5">
+                        <span className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-xs font-medium text-zinc-200">
+                          {empresa.total_lojas} lojas
+                        </span>
                       </div>
                     </div>
                   </Link>

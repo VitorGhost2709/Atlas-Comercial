@@ -8,22 +8,28 @@ export type EmpresaListRow = Pick<
   Tables['empresas']['Row'],
   | 'id'
   | 'nome'
-  | 'nome_responsavel_compras'
-  | 'telefone_principal'
-  | 'whatsapp'
-  | 'status_validacao'
 >
 
 export type EmpresaRow = Tables['empresas']['Row']
 
+export type CompanyGroup = {
+  /** id da empresa/marca (para navegação até /stores) */
+  id: string
+  /** nome da empresa/marca (exibição) */
+  nome_empresa: string
+  /** quantidade de lojas/unidades no contexto atual */
+  total_lojas: number
+}
+
 type LojaEmpresaJoinRow = {
-  empresa: EmpresaListRow | null
+  empresa_id: string
+  empresa: Pick<Tables['empresas']['Row'], 'id' | 'nome'> | null
 }
 
 export async function fetchEmpresasByCityAndCategory(
   cityId: string,
   categoryId: string,
-): Promise<EmpresaListRow[]> {
+): Promise<CompanyGroup[]> {
   const c = cityId.trim()
   const cat = categoryId.trim()
   if (!c || !cat) return []
@@ -31,22 +37,31 @@ export async function fetchEmpresasByCityAndCategory(
   const supabase = getSupabaseClient()
   const result = await supabase
     .from('lojas')
-    .select(
-      'empresa:empresas(id,nome,nome_responsavel_compras,telefone_principal,whatsapp,status_validacao)',
-    )
+    .select('empresa_id,empresa:empresas(id,nome)')
     .eq('cidade_id', c)
     .eq('categoria_id', cat)
 
+  // Agrupamento feito no service (não no componente) para manter o frontend “burro”.
+  // Idealmente isso vira uma view/RPC no banco quando necessário.
   const rows = unwrapList<LojaEmpresaJoinRow>(result)
-  const unique = new Map<string, EmpresaListRow>()
+  const counts = new Map<string, CompanyGroup>()
   for (const r of rows) {
-    if (!r.empresa) continue
-    unique.set(r.empresa.id, r.empresa)
+    const emp = r.empresa
+    if (!emp?.id) continue
+    const prev = counts.get(emp.id)
+    if (!prev) {
+      counts.set(emp.id, { id: emp.id, nome_empresa: emp.nome ?? '', total_lojas: 1 })
+      continue
+    }
+    prev.total_lojas += 1
   }
 
-  return Array.from(unique.values()).sort((a, b) =>
-    (a.nome ?? '').localeCompare(b.nome ?? '', 'pt-BR', { sensitivity: 'base' }),
-  )
+  return Array.from(counts.values())
+    .filter((x) => x.nome_empresa.trim().length > 0)
+    .sort((a, b) => {
+      if (b.total_lojas !== a.total_lojas) return b.total_lojas - a.total_lojas
+      return a.nome_empresa.localeCompare(b.nome_empresa, 'pt-BR', { sensitivity: 'base' })
+    })
 }
 
 export async function fetchEmpresaById(companyId: string): Promise<EmpresaRow | null> {
