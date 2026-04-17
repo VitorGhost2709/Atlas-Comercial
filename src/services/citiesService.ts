@@ -18,6 +18,7 @@ export type CityWithRegion = CityRow & {
 export type CitySearchResult = {
   id: CityRow['id']
   nome: CityRow['nome']
+  regiao_id: CityRow['regiao_id']
   regiao_nome: Tables['regioes_minas']['Row']['nome'] | null
 }
 
@@ -89,11 +90,21 @@ export async function searchCitiesByName(
   const supabase = getSupabaseClient()
   const result = await supabase
     .from('cidades')
-    .select('id,nome,regiao:regioes_minas(nome)')
+    .select('id,nome,regiao_id,regiao:regioes_minas(id,nome)')
     .ilike('nome', `%${q}%`)
     .order('nome', { ascending: true })
     .limit(limit)
 
-  const rows = unwrapList<{ id: string; nome: string; regiao: { nome: string } | null }>(result)
-  return rows.map((r) => ({ id: r.id, nome: r.nome, regiao_nome: r.regiao?.nome ?? null }))
+  const rows = unwrapList<{
+    id: string
+    nome: string
+    regiao_id: string
+    regiao: { id: string; nome: string } | null
+  }>(result)
+  return rows.map((r) => ({
+    id: r.id,
+    nome: r.nome,
+    regiao_id: r.regiao_id,
+    regiao_nome: r.regiao?.nome ?? null,
+  }))
 }

@@ -6,6 +6,10 @@ type Tables = Database['public']['Tables']
 
 export type RegionRow = Pick<Tables['regioes_minas']['Row'], 'id' | 'nome'>
 
+export type SearchRegionsOptions = {
+  limit?: number
+}
+
 /**
  * Lista todas as regiões de Minas (tabela `regioes_minas`), ordenadas por nome.
  * Em falha de rede/RLS/etc., lança o `PostgrestError` retornado pelo Supabase.
@@ -16,6 +20,28 @@ export async function fetchAllRegions(): Promise<RegionRow[]> {
     .from('regioes_minas')
     .select('id,nome')
     .order('nome', { ascending: true })
+
+  return unwrapList<RegionRow>(result)
+}
+
+/**
+ * Busca por trecho no nome da região (`ilike '%query%'`). Query vazia → `[]`.
+ */
+export async function searchRegionsByName(
+  query: string,
+  opts?: SearchRegionsOptions,
+): Promise<RegionRow[]> {
+  const q = query.trim()
+  if (!q) return []
+
+  const limit = opts?.limit ?? 30
+  const supabase = getSupabaseClient()
+  const result = await supabase
+    .from('regioes_minas')
+    .select('id,nome')
+    .ilike('nome', `%${q}%`)
+    .order('nome', { ascending: true })
+    .limit(limit)
 
   return unwrapList<RegionRow>(result)
 }
