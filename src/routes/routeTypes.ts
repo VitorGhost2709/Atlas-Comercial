@@ -2,6 +2,7 @@ export type StateId = string
 export type RegionId = string
 export type CityId = string
 export type CategoryId = string
+export type CompanyId = string
 
 export type RegionsRouteParams = {
   stateId: StateId
@@ -24,9 +25,17 @@ export type CategoriesRouteParams = {
   cityId: CityId
 }
 
-export type EmpresasRouteParams = {
+export type CompaniesRouteParams = {
   stateId: StateId
   regionId: RegionId
   cityId: CityId
   categoryId: CategoryId
+}
+
+export type StoresRouteParams = {
+  stateId: StateId
+  regionId: RegionId
+  cityId: CityId
+  categoryId: CategoryId
+  companyId: CompanyId
 }

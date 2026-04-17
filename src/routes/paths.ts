@@ -1,4 +1,4 @@
-import type { CategoryId, CityId, RegionId, StateId } from './routeTypes'
+import type { CategoryId, CityId, CompanyId, RegionId, StateId } from './routeTypes'
 
 export const ROUTES = {
   states: () => `/`,
@@ -9,13 +9,21 @@ export const ROUTES = {
     `/states/${encodeURIComponent(stateId)}/regions/${encodeURIComponent(regionId)}/cities/${encodeURIComponent(cityId)}`,
   categories: (stateId: StateId, regionId: RegionId, cityId: CityId) =>
     `/states/${encodeURIComponent(stateId)}/regions/${encodeURIComponent(regionId)}/cities/${encodeURIComponent(cityId)}/categories`,
-  empresas: (
+  companies: (
     stateId: StateId,
     regionId: RegionId,
     cityId: CityId,
     categoryId: CategoryId,
   ) =>
-    `/states/${encodeURIComponent(stateId)}/regions/${encodeURIComponent(regionId)}/cities/${encodeURIComponent(cityId)}/categories/${encodeURIComponent(categoryId)}/empresas`,
+    `/states/${encodeURIComponent(stateId)}/regions/${encodeURIComponent(regionId)}/cities/${encodeURIComponent(cityId)}/categories/${encodeURIComponent(categoryId)}/companies`,
+  stores: (
+    stateId: StateId,
+    regionId: RegionId,
+    cityId: CityId,
+    categoryId: CategoryId,
+    companyId: CompanyId,
+  ) =>
+    `/states/${encodeURIComponent(stateId)}/regions/${encodeURIComponent(regionId)}/cities/${encodeURIComponent(cityId)}/categories/${encodeURIComponent(categoryId)}/companies/${encodeURIComponent(companyId)}/stores`,
   search: () => `/search`,
 } as const
 

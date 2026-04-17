@@ -63,7 +63,6 @@ export function RegionsPage() {
               <div className="space-y-2">
                 {Array.from({ length: COL1_COUNT }).map((_, i) => (
                   <div
-                    // eslint-disable-next-line react/no-array-index-key
                     key={i}
                     className="h-10 w-full rounded-xl border border-white/10 bg-white/5 sm:h-11"
                   />
@@ -72,7 +71,6 @@ export function RegionsPage() {
               <div className="space-y-2">
                 {Array.from({ length: COL2_COUNT }).map((_, i) => (
                   <div
-                    // eslint-disable-next-line react/no-array-index-key
                     key={i}
                     className="h-10 w-full rounded-xl border border-white/10 bg-white/5 sm:h-11"
                   />

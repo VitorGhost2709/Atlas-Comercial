@@ -1,10 +1,10 @@
 import { Download, FileSpreadsheet, FileText } from 'lucide-react'
 import { useEffect, useRef, useState } from 'react'
-import type { CompanyListRow } from '../services/companiesService'
+import type { LojaListRow } from '../services/lojasService'
 import type { EmpresasPdfContext } from '../utils/exportEmpresasPdf'
 
 type Props = {
-  rows: CompanyListRow[]
+  rows: LojaListRow[]
   disabled: boolean
   disabledTitle?: string
   basename: string

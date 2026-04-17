@@ -1,5 +1,5 @@
 import type ExcelJSType from 'exceljs'
-import type { CompanyListRow } from '../services/companiesService'
+import type { LojaListRow } from '../services/lojasService'
 import { companiesToExportBodyMatrix, EMPRESAS_EXPORT_HEADERS } from './empresasExportMatrix'
 import { downloadBlob } from './downloadBlob'
 import type { EmpresasPdfContext } from './exportEmpresasPdf'
@@ -13,7 +13,7 @@ const BORDER = 'FFE8E4ED'
 const TEXT_BODY = 'FF2C2C2C'
 const TEXT_CONTEXT = 'FF5C5665'
 
-const COL_COUNT = 5
+const COL_COUNT = 4
 
 function thinBorder(): Partial<ExcelJSType.Borders> {
   const edge: ExcelJSType.Border = { style: 'thin', color: { argb: BORDER } }
@@ -32,8 +32,8 @@ function textVisualWidth(s: string): number {
 
 function computeColumnWidths(headerRow: string[], body: string[][]): number[] {
   const widths = new Array<number>(COL_COUNT).fill(0)
-  const mins = [28, 18, 14, 14, 42]
-  const maxs = [52, 36, 22, 22, 72]
+  const mins = [28, 14, 14, 42]
+  const maxs = [52, 22, 22, 72]
 
   const consider = (col: number, text: string) => {
     const raw = textVisualWidth(text) + 2.8
@@ -47,7 +47,7 @@ function computeColumnWidths(headerRow: string[], body: string[][]): number[] {
 }
 
 export async function exportEmpresasXlsx(
-  rows: CompanyListRow[],
+  rows: LojaListRow[],
   filename: string,
   context: EmpresasPdfContext | null,
 ): Promise<void> {
@@ -56,7 +56,7 @@ export async function exportEmpresasXlsx(
   const wb = new ExcelJS.Workbook()
   wb.creator = 'cidadesMG'
   wb.created = new Date()
-  const ws = wb.addWorksheet('Empresas', {
+  const ws = wb.addWorksheet('Lojas', {
     properties: { defaultRowHeight: 16 },
   })
 
@@ -65,7 +65,7 @@ export async function exportEmpresasXlsx(
 
   ws.mergeCells(1, 1, 1, COL_COUNT)
   const titleCell = ws.getRow(1).getCell(1)
-  titleCell.value = 'EMPRESAS EXPORTADAS'
+  titleCell.value = 'LOJAS EXPORTADAS'
   titleCell.font = { name: 'Calibri', size: 18, bold: true, color: { argb: FILL_TITLE_TEXT } }
   titleCell.alignment = { vertical: 'middle', horizontal: 'center' }
   ws.getRow(1).height = 30
@@ -122,7 +122,7 @@ export async function exportEmpresasXlsx(
       cell.font = { name: 'Calibri', size: 10, color: { argb: TEXT_BODY } }
       cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: zebraFill } }
       cell.border = thinBorder()
-      const isPhoneCol = col === 3 || col === 4
+      const isPhoneCol = col === 2 || col === 3
       cell.alignment = {
         vertical: 'middle',
         horizontal: isPhoneCol ? 'center' : 'left',

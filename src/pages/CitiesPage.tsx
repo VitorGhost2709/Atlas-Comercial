@@ -266,7 +266,6 @@ export function CitiesPage() {
             <div className="space-y-2 p-2">
               {Array.from({ length: 8 }).map((_, i) => (
                 <div
-                  // eslint-disable-next-line react/no-array-index-key
                   key={i}
                   className="h-11 w-full rounded-xl border border-white/10 bg-white/5"
                 />

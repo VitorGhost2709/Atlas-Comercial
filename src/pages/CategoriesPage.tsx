@@ -30,7 +30,6 @@ export function CategoriesPage() {
             <div className="space-y-2 p-2">
               {Array.from({ length: 6 }).map((_, i) => (
                 <div
-                  // eslint-disable-next-line react/no-array-index-key
                   key={i}
                   className="h-11 w-full rounded-xl border border-white/10 bg-white/5"
                 />
@@ -62,7 +61,7 @@ export function CategoriesPage() {
               {(categorias ?? []).map((cat) => (
                 <li key={cat.id}>
                   <Link
-                    to={ROUTES.empresas(
+                    to={ROUTES.companies(
                       effectiveStateId,
                       regionId ?? '',
                       cityId ?? '',

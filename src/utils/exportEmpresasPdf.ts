@@ -1,6 +1,6 @@
 import { jsPDF } from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import type { CompanyListRow } from '../services/companiesService'
+import type { LojaListRow } from '../services/lojasService'
 import { companiesToExportBodyMatrix, EMPRESAS_EXPORT_HEADERS } from './empresasExportMatrix'
 import { downloadBlob } from './downloadBlob'
 
@@ -12,7 +12,7 @@ export type EmpresasPdfContext = {
 }
 
 export function exportEmpresasPdf(
-  rows: CompanyListRow[],
+  rows: LojaListRow[],
   filename: string,
   context: EmpresasPdfContext | null,
 ): void {
@@ -23,7 +23,7 @@ export function exportEmpresasPdf(
   doc.setFont('helvetica', 'bold')
   doc.setFontSize(16)
   doc.setTextColor(44, 31, 68)
-  doc.text('Empresas exportadas', margin, y)
+  doc.text('Lojas exportadas', margin, y)
   y += 8
 
   doc.setFont('helvetica', 'normal')

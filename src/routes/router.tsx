@@ -2,10 +2,11 @@ import { createBrowserRouter } from 'react-router-dom'
 import { AppShell } from '../components/AppShell'
 import { CategoriesPage } from '../pages/CategoriesPage'
 import { CitiesPage } from '../pages/CitiesPage'
-import { EmpresasPage } from '../pages/EmpresasPage'
+import { CompaniesPage } from '../pages/CompaniesPage'
 import { RegionsPage } from '../pages/RegionsPage'
 import { SearchPage } from '../pages/SearchPage'
 import { StatesPage } from '../pages/StatesPage'
+import { StoresPage } from '../pages/StoresPage'
 
 export const router = createBrowserRouter([
   {
@@ -23,7 +24,15 @@ export const router = createBrowserRouter([
       },
       {
         path: '/states/:stateId/regions/:regionId/cities/:cityId/categories/:categoryId/empresas',
-        element: <EmpresasPage />,
+        element: <CompaniesPage />,
+      },
+      {
+        path: '/states/:stateId/regions/:regionId/cities/:cityId/categories/:categoryId/companies',
+        element: <CompaniesPage />,
+      },
+      {
+        path: '/states/:stateId/regions/:regionId/cities/:cityId/categories/:categoryId/companies/:companyId/stores',
+        element: <StoresPage />,
       },
       { path: '/search', element: <SearchPage /> },
     ],

@@ -60,9 +60,46 @@ export type Database = {
         }
         Relationships: []
       }
-      empresas_clientes: {
+      empresas: {
         Row: {
           id: string
+          categoria_id: string
+          nome: string
+          nome_responsavel_compras: string | null
+          telefone_principal: string | null
+          whatsapp: string | null
+          status_validacao: string | null
+          created_at: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          id?: string
+          categoria_id: string
+          nome: string
+          nome_responsavel_compras?: string | null
+          telefone_principal?: string | null
+          whatsapp?: string | null
+          status_validacao?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          id?: string
+          categoria_id?: string
+          nome?: string
+          nome_responsavel_compras?: string | null
+          telefone_principal?: string | null
+          whatsapp?: string | null
+          status_validacao?: string | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      lojas: {
+        Row: {
+          id: string
+          empresa_id: string
           nome_estabelecimento: string
           cidade_id: string
           categoria_id: string
@@ -70,9 +107,11 @@ export type Database = {
           whatsapp: string | null
           nome_responsavel_compras: string | null
           endereco: string | null
+          status_validacao: string | null
         }
         Insert: {
           id?: string
+          empresa_id: string
           nome_estabelecimento: string
           cidade_id: string
           categoria_id: string
@@ -80,9 +119,11 @@ export type Database = {
           whatsapp?: string | null
           nome_responsavel_compras?: string | null
           endereco?: string | null
+          status_validacao?: string | null
         }
         Update: {
           id?: string
+          empresa_id?: string
           nome_estabelecimento?: string
           cidade_id?: string
           categoria_id?: string
@@ -90,6 +131,7 @@ export type Database = {
           whatsapp?: string | null
           nome_responsavel_compras?: string | null
           endereco?: string | null
+          status_validacao?: string | null
         }
         Relationships: []
       }
