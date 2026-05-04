@@ -99,7 +99,7 @@ export type Database = {
       lojas: {
         Row: {
           id: string
-          empresa_id: string
+          empresa_id: string | null
           nome_estabelecimento: string
           cidade_id: string
           categoria_id: string
@@ -112,7 +112,7 @@ export type Database = {
         }
         Insert: {
           id?: string
-          empresa_id: string
+          empresa_id?: string | null
           nome_estabelecimento: string
           cidade_id: string
           categoria_id: string
@@ -125,7 +125,7 @@ export type Database = {
         }
         Update: {
           id?: string
-          empresa_id?: string
+          empresa_id?: string | null
           nome_estabelecimento?: string
           cidade_id?: string
           categoria_id?: string

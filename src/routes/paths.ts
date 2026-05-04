@@ -1,4 +1,4 @@
-import type { CategoryId, CityId, CompanyId, RegionId, StateId } from './routeTypes'
+import type { CategoryId, CityId, CompanyId, RegionId, StateId, StoreId } from './routeTypes'
 
 export const ROUTES = {
   states: () => `/`,
@@ -24,6 +24,14 @@ export const ROUTES = {
     companyId: CompanyId,
   ) =>
     `/states/${encodeURIComponent(stateId)}/regions/${encodeURIComponent(regionId)}/cities/${encodeURIComponent(cityId)}/categories/${encodeURIComponent(categoryId)}/companies/${encodeURIComponent(companyId)}/stores`,
+  store: (
+    stateId: StateId,
+    regionId: RegionId,
+    cityId: CityId,
+    categoryId: CategoryId,
+    storeId: StoreId,
+  ) =>
+    `/states/${encodeURIComponent(stateId)}/regions/${encodeURIComponent(regionId)}/cities/${encodeURIComponent(cityId)}/categories/${encodeURIComponent(categoryId)}/stores/${encodeURIComponent(storeId)}`,
   search: () => `/search`,
 } as const
 

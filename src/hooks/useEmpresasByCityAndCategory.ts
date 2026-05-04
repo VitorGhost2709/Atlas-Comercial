@@ -1,8 +1,5 @@
 import { fetchCategoryById } from '../services/categoriesService'
-import {
-  fetchEmpresasListingForCompaniesPage,
-  type EmpresasListingResult,
-} from '../services/empresasService'
+import { fetchEmpresasListingForCompaniesPage, type EmpresasListingResult } from '../services/empresasService'
 import { useAsync } from './useAsync'
 
 const EMPTY_GROUPED: EmpresasListingResult = { variant: 'grouped', rows: [] }

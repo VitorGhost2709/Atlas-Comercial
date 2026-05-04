@@ -21,6 +21,19 @@ export type ClinicLojaListRow = Pick<
   | 'endereco'
 >
 
+/** Loja avulsa (sem empresa_id) para categoria híbrida (ex.: Depósito de bebidas). */
+export type LojaAvulsaListRow = Pick<
+  Tables['lojas']['Row'],
+  | 'id'
+  | 'empresa_id'
+  | 'nome_estabelecimento'
+  | 'nome_responsavel_compras'
+  | 'telefone_principal'
+  | 'whatsapp'
+  | 'endereco'
+  | 'status_validacao'
+>
+
 export type LojaRow = Tables['lojas']['Row']
 
 export async function fetchLojasByEmpresaCityAndCategory(
@@ -69,6 +82,33 @@ export async function fetchLojasFlatByCityAndCategoryForClinics(
     .order('nome_estabelecimento', { ascending: true })
 
   return unwrapList<ClinicLojaListRow>(result)
+}
+
+/**
+ * Lojas avulsas (sem empresa_id) no contexto cidade/categoria.
+ * Não exige `aparece_no_site` (muitas avulsas ficam com valor nulo/falso e sumiriam da lista).
+ */
+export async function fetchLojasAvulsasByCityAndCategory(
+  cityId: string,
+  categoryId: string,
+): Promise<LojaAvulsaListRow[]> {
+  const c = cityId.trim()
+  const cat = categoryId.trim()
+  if (!c || !cat) return []
+
+  const supabase = getSupabaseClient()
+  const result = await supabase
+    .from('lojas')
+    .select(
+      'id,empresa_id,nome_estabelecimento,nome_responsavel_compras,telefone_principal,whatsapp,endereco,status_validacao',
+    )
+    .eq('cidade_id', c)
+    .eq('categoria_id', cat)
+    // Para UUID, o caso real é `NULL` (evita comparar com string vazia).
+    .is('empresa_id', null)
+    .order('nome_estabelecimento', { ascending: true })
+
+  return unwrapList<LojaAvulsaListRow>(result)
 }
 
 export async function fetchLojaById(storeId: string): Promise<LojaRow | null> {

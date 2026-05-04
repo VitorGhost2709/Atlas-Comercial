@@ -1,8 +1,13 @@
-import { isClinicasOdontologicasCategory } from '../config/specialCategoryRules'
+import { isClinicasOdontologicasCategory, isDepositoBebidasCategory } from '../config/specialCategoryRules'
 import { getSupabaseClient } from '../lib/supabaseClient'
 import type { Database } from '../types/db'
 import { unwrapList, unwrapSingle } from './supabaseResult'
-import { fetchLojasFlatByCityAndCategoryForClinics, type ClinicLojaListRow } from './lojasService'
+import {
+  fetchLojasAvulsasByCityAndCategory,
+  fetchLojasFlatByCityAndCategoryForClinics,
+  type ClinicLojaListRow,
+  type LojaAvulsaListRow,
+} from './lojasService'
 
 type Tables = Database['public']['Tables']
 
@@ -27,6 +32,7 @@ export type CompanyGroup = {
 export type EmpresasListingResult =
   | { variant: 'grouped'; rows: CompanyGroup[] }
   | { variant: 'clinics'; rows: ClinicLojaListRow[] }
+  | { variant: 'hybrid'; empresas: CompanyGroup[]; lojasAvulsas: LojaAvulsaListRow[] }
 
 type LojaEmpresaJoinRow = {
   empresa_id: string
@@ -88,6 +94,27 @@ export async function fetchEmpresasListingForCompaniesPage(
       variant: 'clinics',
       rows: await fetchLojasFlatByCityAndCategoryForClinics(c, cat),
     }
+  }
+
+  if (isDepositoBebidasCategory(cat, categoryNome)) {
+    if (import.meta.env.DEV) {
+      // Log temporário para diagnóstico em dev (não afeta produção).
+      console.debug('[CompaniesPage] categoria híbrida ativa', {
+        categoryId: cat,
+        categoryNome,
+      })
+    }
+    const [empresas, lojasAvulsas] = await Promise.all([
+      fetchEmpresasByCityAndCategory(c, cat),
+      fetchLojasAvulsasByCityAndCategory(c, cat),
+    ])
+    if (import.meta.env.DEV) {
+      console.debug('[CompaniesPage] híbrido: totais', {
+        empresas: empresas.length,
+        lojasAvulsas: lojasAvulsas.length,
+      })
+    }
+    return { variant: 'hybrid', empresas, lojasAvulsas }
   }
 
   return { variant: 'grouped', rows: await fetchEmpresasByCityAndCategory(c, cat) }

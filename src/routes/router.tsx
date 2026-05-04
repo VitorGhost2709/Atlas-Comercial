@@ -6,6 +6,7 @@ import { CompaniesPage } from '../pages/CompaniesPage'
 import { RegionsPage } from '../pages/RegionsPage'
 import { SearchPage } from '../pages/SearchPage'
 import { StatesPage } from '../pages/StatesPage'
+import { StorePage } from '../pages/StorePage'
 import { StoresPage } from '../pages/StoresPage'
 
 export const router = createBrowserRouter([
@@ -33,6 +34,10 @@ export const router = createBrowserRouter([
       {
         path: '/states/:stateId/regions/:regionId/cities/:cityId/categories/:categoryId/companies/:companyId/stores',
         element: <StoresPage />,
+      },
+      {
+        path: '/states/:stateId/regions/:regionId/cities/:cityId/categories/:categoryId/stores/:storeId',
+        element: <StorePage />,
       },
       { path: '/search', element: <SearchPage /> },
     ],
