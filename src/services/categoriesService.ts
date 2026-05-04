@@ -17,7 +17,12 @@ export async function fetchAllCategories(): Promise<CategoryRow[]> {
     .select('id,nome')
     .order('nome', { ascending: true })
 
-  return unwrapList<CategoryRow>(result)
+  // Catálogo dinâmico: qualquer linha em `categorias` (permitida por RLS) aparece na UI.
+  // Ordenação explícita em pt-BR para nomes com acento/plural ficarem previsíveis na lista.
+  const rows = unwrapList<CategoryRow>(result)
+  return [...rows].sort((a, b) =>
+    a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }),
+  )
 }
 
 /**

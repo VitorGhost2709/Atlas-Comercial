@@ -108,6 +108,7 @@ export type Database = {
           nome_responsavel_compras: string | null
           endereco: string | null
           status_validacao: string | null
+          aparece_no_site: boolean | null
         }
         Insert: {
           id?: string
@@ -120,6 +121,7 @@ export type Database = {
           nome_responsavel_compras?: string | null
           endereco?: string | null
           status_validacao?: string | null
+          aparece_no_site?: boolean | null
         }
         Update: {
           id?: string
@@ -132,6 +134,7 @@ export type Database = {
           nome_responsavel_compras?: string | null
           endereco?: string | null
           status_validacao?: string | null
+          aparece_no_site?: boolean | null
         }
         Relationships: []
       }

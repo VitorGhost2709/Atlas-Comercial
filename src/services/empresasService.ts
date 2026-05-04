@@ -1,6 +1,8 @@
+import { isClinicasOdontologicasCategory } from '../config/specialCategoryRules'
 import { getSupabaseClient } from '../lib/supabaseClient'
 import type { Database } from '../types/db'
 import { unwrapList, unwrapSingle } from './supabaseResult'
+import { fetchLojasFlatByCityAndCategoryForClinics, type ClinicLojaListRow } from './lojasService'
 
 type Tables = Database['public']['Tables']
 
@@ -20,6 +22,11 @@ export type CompanyGroup = {
   /** quantidade de lojas/unidades no contexto atual */
   total_lojas: number
 }
+
+/** Resultado da tela Empresas: agrupado por marca ou lista plana (clínicas). */
+export type EmpresasListingResult =
+  | { variant: 'grouped'; rows: CompanyGroup[] }
+  | { variant: 'clinics'; rows: ClinicLojaListRow[] }
 
 type LojaEmpresaJoinRow = {
   empresa_id: string
@@ -62,6 +69,28 @@ export async function fetchEmpresasByCityAndCategory(
       if (b.total_lojas !== a.total_lojas) return b.total_lojas - a.total_lojas
       return a.nome_empresa.localeCompare(b.nome_empresa, 'pt-BR', { sensitivity: 'base' })
     })
+}
+
+/**
+ * Dados da página Empresas: por padrão agrupa por marca; para clínicas odontológicas lista cada loja.
+ */
+export async function fetchEmpresasListingForCompaniesPage(
+  cityId: string,
+  categoryId: string,
+  categoryNome: string | null | undefined,
+): Promise<EmpresasListingResult> {
+  const c = cityId.trim()
+  const cat = categoryId.trim()
+  if (!c || !cat) return { variant: 'grouped', rows: [] }
+
+  if (isClinicasOdontologicasCategory(cat, categoryNome)) {
+    return {
+      variant: 'clinics',
+      rows: await fetchLojasFlatByCityAndCategoryForClinics(c, cat),
+    }
+  }
+
+  return { variant: 'grouped', rows: await fetchEmpresasByCityAndCategory(c, cat) }
 }
 
 export async function fetchEmpresaById(companyId: string): Promise<EmpresaRow | null> {
