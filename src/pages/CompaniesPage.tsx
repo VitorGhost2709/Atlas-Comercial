@@ -37,7 +37,7 @@ function CampoClinica({
           destaque ? 'font-semibold text-zinc-100' : 'font-normal text-zinc-300'
         } ${
           valueNoClip
-            ? 'lg:whitespace-nowrap'
+            ? 'lg:whitespace-nowrap tabular-nums'
             : valueNoWrap
               ? 'lg:whitespace-nowrap lg:overflow-hidden lg:text-ellipsis'
               : 'break-words'
@@ -295,17 +295,24 @@ export function CompaniesPage() {
                           className="block rounded-xl border border-white/10 bg-white/5 px-4 py-4 outline-none transition hover:border-[#b66570]/35 hover:bg-white/[0.07] focus-visible:ring-2 focus-visible:ring-[#ed9e6f]/30 active:scale-[0.99] sm:px-5 lg:px-6"
                         >
                           <div className="flex flex-col gap-4 lg:grid lg:grid-cols-12 lg:gap-x-4 lg:gap-y-2">
-                            <div className="lg:col-span-4">
+                            <div className="lg:col-span-3">
                               <CampoClinica
                                 label="Loja avulsa"
                                 value={textoOuEmDash(loja.nome_estabelecimento)}
                                 destaque
                               />
                             </div>
-                            <div className="lg:col-span-3">
+                            <div className="lg:col-span-2">
                               <CampoClinica
                                 label="Telefone"
                                 value={textoOuEmDash(loja.telefone_principal)}
+                                valueNoClip
+                              />
+                            </div>
+                            <div className="lg:col-span-2">
+                              <CampoClinica
+                                label="WhatsApp"
+                                value={textoOuEmDash(loja.whatsapp)}
                                 valueNoClip
                               />
                             </div>

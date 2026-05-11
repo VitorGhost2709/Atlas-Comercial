@@ -1,4 +1,4 @@
-import { isClinicasOdontologicasCategory, isDepositoBebidasCategory } from '../config/specialCategoryRules'
+import { isClinicasOdontologicasCategory, isHybridEmpresasListingCategory } from '../config/specialCategoryRules'
 import { getSupabaseClient } from '../lib/supabaseClient'
 import type { Database } from '../types/db'
 import { unwrapList, unwrapSingle } from './supabaseResult'
@@ -96,10 +96,9 @@ export async function fetchEmpresasListingForCompaniesPage(
     }
   }
 
-  if (isDepositoBebidasCategory(cat, categoryNome)) {
+  if (isHybridEmpresasListingCategory(cat, categoryNome)) {
     if (import.meta.env.DEV) {
-      // Log temporário para diagnóstico em dev (não afeta produção).
-      console.debug('[CompaniesPage] categoria híbrida ativa', {
+      console.debug('[Empresas] listagem híbrida (marcas + lojas avulsas)', {
         categoryId: cat,
         categoryNome,
       })
@@ -109,7 +108,7 @@ export async function fetchEmpresasListingForCompaniesPage(
       fetchLojasAvulsasByCityAndCategory(c, cat),
     ])
     if (import.meta.env.DEV) {
-      console.debug('[CompaniesPage] híbrido: totais', {
+      console.debug('[Empresas] híbrido: totais', {
         empresas: empresas.length,
         lojasAvulsas: lojasAvulsas.length,
       })
